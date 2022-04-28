@@ -1,0 +1,21 @@
+on: [push, pull_request]
+
+name: canister
+
+jobs:
+  canister:
+    runs-on: ubuntu-latest
+    env:
+      DFX_VERSION: 0.9.2
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dfx
+        run: |
+          DFX_VERSION=${{ env.DFX_VERSION }} sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+      - name: canister deploy
+        run: |
+          dfx start --background
+          dfx deploy --no-wallet
+      - name: canister stop
+        run: |
+          dfx stop
